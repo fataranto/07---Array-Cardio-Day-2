@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 
   <div class="keys">
+
     <div data-key="65" class="key">
       <kbd>A</kbd>
       <span class="sound">clap</span>
@@ -57,10 +60,33 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>
+    function playSound(e) {
+      const myKcode = e.keyCode;
+      const myColor = "hsl(" + Math.floor(Math.random() * 360) + ",100%,75%)";
+      document.querySelector("html").style.backgroundColor = myColor;
+      const audio = document.querySelector("audio[data-key='" + myKcode + "']");
+      const myDiv = document.querySelector("div[data-key='" + myKcode + "']");
 
-</script>
+
+      if (!audio) return;
+      audio.currentTime = 0;
+      audio.play();
+      myDiv.classList.add('playing');
+    }
+
+    function removeTransition(e) {
+      if (e.propertyName != 'transform') return;
+      this.classList.remove('playing');
+    }
+
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+    window.addEventListener('keydown', playSound);
+  </script>
 
 
 </body>
+
 </html>
